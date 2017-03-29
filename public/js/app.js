@@ -1,7 +1,6 @@
-
 var CONTACT_ID_ATTR_NAME = 'data-contractid';
-var CONTACT_REMOVE_CONFIRM = 'Are you sure?';
-var NO_CONTACTS_TEXT = 'No contacts';
+var CONTACT_REMOVE_CONFIRM = 'Deseja remover?';
+var NO_CONTACTS_TEXT = 'Nenhum contato';
 
 class ContactBook {
 
@@ -26,8 +25,7 @@ class ContactBook {
 
         this.contactDetailsForm = document.getElementById('contactDetails');
         this.contactIdField = document.getElementById('contactid');
-        this.firstNameField = document.getElementById('firstname');
-        this.lastNameField = document.getElementById('lastname');
+        this.nameField = document.getElementById('name');
         this.phoneField = document.getElementById('phone');
 
         this.addContactButton = document.getElementById('addContact');
@@ -63,9 +61,9 @@ class ContactBook {
     }
 
     sortContacts(contacts) {
-        contacts.sort((contact1, contact2) => {
-            return (contact1.firstName + contact1.lastName).localeCompare(contact2.firstName + contact2.firstName);
-        });
+        //contacts.sort((contact1, contact2) => {
+        //    return (contact1.name).localeCompare(contact2.name);
+        //});
     }
 
     renderContactList(contacts) {
@@ -96,7 +94,7 @@ class ContactBook {
     createContact(contact) {
         var result = this._contactTemplate.cloneNode(true);
         result.setAttribute(CONTACT_ID_ATTR_NAME, contact._id);
-        result.querySelector('.contact-name').innerText = contact.firstName + ' ' + contact.lastName;
+        result.querySelector('.contact-name').innerText = contact.name;
         result.querySelector('.contact-phone').innerText = contact.phone;
         result.addEventListener('click', event => { this.showContact(event) });
         return result;
@@ -112,7 +110,7 @@ class ContactBook {
     }
 
     addContact() {
-        this.setContactDetails({ firstName: 'Name' });
+        this.setContactDetails({ name: '' });
         this.toggleContactFormEditing(true);
     }
 
@@ -156,8 +154,7 @@ class ContactBook {
     getContactDetails() {
         return {
             _id: this.getContactId(),
-            firstName: this.firstNameField.value,
-            lastName: this.lastNameField.value,
+            name: this.nameField.value,
             phone: this.phoneField.value
         };
     }
@@ -168,29 +165,28 @@ class ContactBook {
 
     setContactDetails(contactDetails) {
         this.contactIdField.value = contactDetails._id || '';
-        this.firstNameField.value = contactDetails.firstName || '';
-        this.lastNameField.value = contactDetails.lastName || '';
+        this.nameField.value = contactDetails.name || '';
         this.phoneField.value = contactDetails.phone || '';
     }
 
     toggleContactFormEditing(isEditing) {
         var isContactSelected = !this.getContactId();
-
+console.log(isEditing);
+console.log(this.addContactButton);
         this.toggleFade(this.contactDetailsForm, !isEditing && isContactSelected);
 
         this.toggleElement(this.editContactButton, !isEditing && !isContactSelected);
         this.toggleElement(this.removeContactButton, !isEditing && !isContactSelected);
 
-        this.toggleElement(this.addContactButton, !isEditing);
+        this.toggleElement(this.addContactButton, !isEditing && isContactSelected);
         this.toggleElement(this.saveContactButton, isEditing);
         this.toggleElement(this.cancelEditButton, isEditing);
 
-        this.toggleDisabled(this.firstNameField, !isEditing);
-        this.toggleDisabled(this.lastNameField, !isEditing);
+        this.toggleDisabled(this.nameField, !isEditing);
         this.toggleDisabled(this.phoneField, !isEditing);
 
-        this.firstNameField.focus();
-        this.firstNameField.setSelectionRange(0, this.firstNameField.value.length);
+        this.nameField.focus();
+        this.nameField.setSelectionRange(0, this.nameField.value.length);
     }
 
     toggleElement(element, isShown) {
