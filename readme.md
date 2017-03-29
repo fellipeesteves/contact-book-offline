@@ -1,4 +1,4 @@
-# Offline Web Apps | Service Workers & PouchDB |
+# Contatos Offline
 
 ## Requisitos
 
